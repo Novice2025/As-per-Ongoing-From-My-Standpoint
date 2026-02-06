@@ -6,6 +6,7 @@
     <title>Lego Disruptive Block Chain by Daby</title>
     <!-- Mermaid JS for Diagrams -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: false });</script>
     <style>
         :root {
             --bg-dark: #0f1115;
@@ -19,7 +20,7 @@
             --brazil-green: #009c3b;
             --error: #ff4d4d;
             --vs-color: #ff0055;
-            --power-color: #00ccff; /* New color for Power Move */
+            --power-color: #00ccff;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -30,6 +31,13 @@
             line-height: 1.6;
             padding-bottom: 50px;
         }
+
+        /* --- HIGHLIGHT CLASSES --- */
+        .h-yellow { color: #ffe600; font-weight: bold; }
+        .h-cyan { color: #00f2ff; font-weight: bold; }
+        .h-pink { color: #ff00aa; font-weight: bold; }
+        .h-under { text-decoration: underline; text-decoration-color: rgba(255,255,255,0.5); text-underline-offset: 3px; }
+        .h-box { background: rgba(255,255,255,0.1); padding: 0 4px; border-radius: 3px; }
 
         /* Header */
         header {
@@ -112,52 +120,52 @@
             color: var(--accent);
             font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 10px;
+            letter-spacing: 1px;
             display: block;
+            margin-bottom: 10px;
         }
 
-        /* Comparison Box (Used for As Per) */
+        /* Comparison Box */
         .comparison-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 20px;
             margin-top: 20px;
-            border-radius: 4px;
-        }
-        .comp-title { color: var(--vs-color); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px; }
-        .comp-text { color: #ddd; font-size: 1rem; margin-bottom: 15px; }
-
-        .comp-examples {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .comp-example-card {
-            background: rgba(0,0,0,0.3);
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid var(--vs-color);
             padding: 15px;
-            border-left: 2px solid var(--vs-color);
+            border-radius: 6px;
         }
+        .comp-title { color: var(--vs-color); font-weight: bold; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9rem; }
+        .comp-text { color: #ffcccc; font-size: 0.95rem; }
 
-        .comp-ex-label { font-size: 0.75rem; color: var(--vs-color); text-transform: uppercase; margin-bottom: 5px; }
-        .comp-ex-text { font-style: italic; color: #ccc; font-size: 0.9rem; }
-
-        /* Power Move Box (Used for Standpoint) */
-        .power-box {
-            background: rgba(0, 204, 255, 0.05);
-            border: 1px solid var(--power-color);
-            padding: 20px;
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
-            border-radius: 4px;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        .power-title { color: var(--power-color); font-weight: bold; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px; }
-        .power-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .power-col h4 { color: #fff; font-size: 0.9rem; margin-bottom: 8px; text-transform: uppercase; }
-        .power-col p { color: #aaa; font-size: 0.95rem; }
-        .power-bad { color: var(--error); }
-        .power-good { color: var(--accent); }
+        .comparison-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background: rgba(0, 255, 157, 0.1);
+            border-bottom: 2px solid var(--accent);
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .comparison-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
+        }
 
         /* Scenarios Grid */
         .scenarios-grid {
@@ -170,113 +178,91 @@
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            padding: 25px;
-            border-radius: 4px;
+            padding: 20px;
+            border-radius: 8px;
             transition: transform 0.2s;
-            display: flex;
-            flex-direction: column;
         }
-
-        .card:hover { transform: translateY(-5px); border-color: var(--text-muted); }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
         .card-header {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 10px;
-            font-weight: bold;
             display: flex;
             justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
         }
 
         .scenario-text {
-            font-style: italic;
             font-size: 1.1rem;
+            color: var(--text-main);
             margin-bottom: 15px;
-            color: #fff;
-            border-left: 2px solid var(--text-muted);
+            font-style: italic;
+            border-left: 2px solid var(--accent);
             padding-left: 15px;
         }
 
-        .context-text { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
-
-        /* Brazilian Grasp Box */
-        .brazil-box {
-            background: linear-gradient(135deg, rgba(0, 156, 59, 0.15) 0%, rgba(255, 204, 0, 0.05) 100%);
-            border: 1px solid var(--brazil-green);
-            padding: 20px;
-            margin-top: auto;
-            border-radius: 4px;
-            position: relative;
+        .context-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
         }
 
+        /* Brazil Box */
+        .brazil-box {
+            background: rgba(255, 204, 0, 0.05);
+            border: 1px solid var(--brazil-yellow);
+            padding: 15px;
+            border-radius: 6px;
+        }
         .brazil-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 8px;
+            margin-bottom: 8px;
         }
-
-        .flag-icon { font-size: 1.5rem; }
-
-        .brazil-equiv-label {
-            color: var(--brazil-yellow);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .flag-icon { font-size: 1.2rem; }
+        .brazil-equiv-label { 
+            display: block; 
+            font-size: 0.7rem; 
+            color: var(--brazil-yellow); 
+            text-transform: uppercase; 
+            font-weight: bold;
         }
-
         .brazil-equiv-text {
+            font-size: 1rem;
+            font-weight: bold;
             color: #fff;
-            font-weight: 900;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            display: block;
         }
-
         .brazil-explanation {
-            color: #ccc;
             font-size: 0.9rem;
-            line-height: 1.4;
+            color: #ddd;
+            margin-top: 5px;
         }
 
         /* Exercise Section */
         .exercise-section {
-            background: #111;
-            border: 1px solid var(--border);
-            padding: 40px;
+            background: linear-gradient(45deg, #1a1a1a, #222);
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
-            margin-top: 50px;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid var(--border);
         }
-
-        .exercise-section::before {
-            content: "PARTICIPATIVE EXERCISE";
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 2px;
-        }
-
-        .prompt { font-size: 1.2rem; margin-bottom: 20px; color: #fff; }
-
+        .prompt { font-size: 1.2rem; margin-bottom: 20px; }
         .input-area {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             padding: 15px;
             background: #000;
             border: 1px solid var(--border);
             color: #fff;
+            border-radius: 6px;
             font-size: 1rem;
-            margin-bottom: 20px;
-            border-radius: 4px;
+            margin-bottom: 15px;
         }
-
         .input-area:focus { outline: none; border-color: var(--accent); }
 
         .check-btn {
@@ -284,196 +270,187 @@
             color: #000;
             border: none;
             padding: 12px 30px;
+            font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            font-size: 1rem;
+            border-radius: 6px;
             text-transform: uppercase;
         }
+        .check-btn:hover { background: #00cc7d; }
 
-        .check-btn:hover { background: #fff; }
-
-        .feedback {
-            margin-top: 20px;
-            font-weight: bold;
-            min-height: 24px;
-        }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; }
         .feedback.success { color: var(--accent); }
         .feedback.error { color: var(--error); }
-
-        @media (max-width: 600px) {
-            .comp-examples, .power-grid { grid-template-columns: 1fr; }
-        }
 
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Lego Disruptive Block Chain <span style="font-size:0.5em; vertical-align: middle; color:#666;">by Daby</span></h1>
-        <p class="subtitle">High-Level English for Brazilian Decision Makers</p>
+        <h1>Lego Disruptive Block Chain</h1>
+        <div class="subtitle">English for Brazilian Executives • High-Stakes Communication</div>
     </header>
 
-    <nav class="nav-container">
+    <div class="nav-container">
         <button class="nav-btn active" onclick="switchTab('as-per')">As Per</button>
         <button class="nav-btn" onclick="switchTab('ongoing-issues')">Ongoing Issues</button>
         <button class="nav-btn" onclick="switchTab('standpoint')">From My Standpoint</button>
-    </nav>
+    </div>
 
-    <div id="content-area" class="container">
-        <!-- Content will be injected here by JavaScript -->
+    <div class="container" id="content-area">
+        <!-- Content Injected Here -->
     </div>
 
     <script>
-        // Initialize Mermaid
-        mermaid.initialize({ startOnLoad: false, theme: 'dark' });
-
-        // --- DATA STORE ---
+        // --- DATA SOURCE ---
         const lessonData = {
             "as-per": {
                 title: "As Per",
-                why: "Stop saying 'According to' for everything. 'As per' is the language of contracts, compliance, and binding agreements. It protects you.",
+                why: "Brazilians love 'According to' (Segundo). But in contracts and formal instructions, 'As per' is the standard. It implies <span class='h-cyan'>binding authority</span> or <span class='h-cyan'>mutual agreement</span>.",
                 diagramCode: `
-                graph TD
-                  A[Start: You need to cite a source] --> B{Is it a Rule, Contract, or Law?}
-                  B -- YES --> C[Use: AS PER]
-                  B -- NO --> D[Use: ACCORDING TO]
-                  C --> E[Formal & Binding]
-                  D --> F[Neutral & General]
-                  style C fill:#00ff9d,color:#000,stroke:#fff
-                  style D fill:#ff0055,color:#fff,stroke:#fff
+                graph LR
+                  A[Contract/Rule] -->|Binding| B(As Per)
+                  C[News/Rumor] -->|Neutral| D(According To)
+                  style B fill:#00ff9d,color:#000
+                  style D fill:#333,color:#fff
                 `,
                 comparison: {
                     title: "VS: According to vs. As Per",
-                    text: "<strong>According to</strong> is general and neutral (e.g., news, weather, public info). <strong>As per</strong> is formal and binding, used specifically for rules, contracts, and instructions.",
-                    examples: [
-                        {
-                            label: "Correct usage of 'According to'",
-                            text: "\"According to the latest Bloomberg report, the dollar is rising against the real.\""
-                        },
-                        {
-                            label: "Correct usage of 'According to'",
-                            text: "\"According to a study by FGV, remote work productivity has increased by 15%.\""
-                        }
-                    ]
+                    text: "<strong>According to</strong> is general and neutral (e.g., 'According to the weather forecast'). <br><strong>As per</strong> is specific and binding (e.g., 'As per Clause 4.2'). Use 'As per' when you want to sound compliant and professional."
                 },
+                usageTable: [
+                    { asPer: "As per our discussion", accordingTo: "According to the news" },
+                    { asPer: "As per the contract", accordingTo: "According to the weather forecast" },
+                    { asPer: "As per your email (Instruction)", accordingTo: "According to John (Opinion)" },
+                    { asPer: "As per the policy", accordingTo: "According to a recent study" },
+                    { asPer: "As per the deadline", accordingTo: "According to rumors" },
+                    { asPer: "As per the instructions", accordingTo: "According to the data" },
+                    { asPer: "As per the budget", accordingTo: "According to the survey" },
+                    { asPer: "As per the law", accordingTo: "According to the article" },
+                    { asPer: "As per the agreement", accordingTo: "According to him" },
+                    { asPer: "As per the attached file", accordingTo: "According to the website" }
+                ],
                 scenarios: [
                     {
-                        company: "Nubank",
-                        role: "Compliance Director",
-                        name: "Mariana",
-                        text: "\"As per the new Central Bank regulations (BACEN), we need to adjust the KYC flow by Friday.\"",
-                        context: "Mariana isn't asking for a favor. She is stating a requirement based on external authority."
-                    },
-                    {
                         company: "Embraer",
-                        role: "Logistics VP",
+                        role: "Project Manager",
                         name: "Roberto",
-                        text: "\"As per our SLA with the supplier, they are liable for this delay, not us.\"",
-                        context: "Roberto is using the contract to defend his team's position and shift liability."
+                        text: "\"<span class='h-yellow'>As per</span> the technical specifications, the landing gear requires Grade A titanium.\"",
+                        context: "Roberto isn't guessing. He is citing a binding document.",
+                        brazilEquiv: "Conforme / De acordo com (Regra)"
                     },
                     {
-                        company: "XP Investimentos",
-                        role: "Project Manager",
-                        name: "Felipe",
-                        text: "\"As per our discussion this morning, I have halted the merger process.\"",
-                        context: "Documenting a verbal agreement in an email to ensure there is a paper trail."
+                        company: "Nubank",
+                        role: "Compliance Officer",
+                        name: "Juliana",
+                        text: "\"We must freeze the account <span class='h-yellow'>as per</span> Central Bank regulation 404.\"",
+                        context: "She is using the law as a shield. It's not her opinion.",
+                        brazilEquiv: "Conforme (Lei/Regra)"
+                    },
+                    {
+                        company: "Vale",
+                        role: "Logistics Director",
+                        name: "Carlos",
+                        text: "\"The shipment was delayed <span class='h-yellow'>as per</span> your request to hold for inspection.\"",
+                        context: "Carlos is politely reminding the client that *they* asked for the delay.",
+                        brazilEquiv: "Conforme (Solicitação)"
                     }
                 ],
-                brazilEquiv: "CONFORME / CONSOANTE",
-                brazilTip: "Use para citar documentos, leis ou e-mails anteriores. É a sua ferramenta de defesa corporativa.",
+                brazilTip: "Use 'Conforme' mentalmente. Se for algo oficial, use 'As per'. Se for fofoca ou notícia, use 'According to'.",
                 exercise: {
-                    prompt: "Translate: 'Conforme o contrato, o pagamento é devido hoje.'",
-                    keywords: ["contract", "payment", "due"],
-                    successMsg: "Perfect. You sounded authoritative.",
-                    failMsg: "Try again. Did you use 'As per', 'contract', and 'due'?"
+                    prompt: "Translate: 'Conforme discutimos, enviei o relatório.'",
+                    keywords: ["as per", "discussed", "sent", "report"],
+                    successMsg: "Perfect! 'As per our discussion' is the gold standard.",
+                    failMsg: "Try starting with 'As per our discussion...' or 'As per what we discussed...'"
                 }
             },
             "ongoing-issues": {
                 title: "Ongoing Issues",
-                why: "Don't say 'We have problems'. That sounds weak. 'Ongoing issues' implies you are aware of the situation and managing it professionally.",
+                why: "Brazilians say 'Problem' too much. 'Problem' sounds like a failure. 'Ongoing Issue' sounds like a <span class='h-pink'>situation being managed</span>. It is professional and calm.",
                 diagramCode: `
-                graph LR
-                  A(Problem Occurs) --> B{Your Reaction}
-                  B -- Amateur --> C["We have a problem"]
-                  B -- Pro --> D["We have an ONGOING ISSUE"]
-                  D --> E[Implies: I am fixing it]
-                  style D fill:#00ff9d,color:#000
+                graph TD
+                  A[Problem Detected] --> B{Is it solved?}
+                  B -- No --> C[It is an Ongoing Issue]
+                  C --> D[We are handling it]
+                  style C fill:#ff0055,color:#fff
                 `,
                 scenarios: [
                     {
-                        company: "iFood",
-                        role: "CTO",
-                        name: "Juliana",
-                        text: "\"We are aware of the ongoing issues with the payment gateway and a patch is being deployed.\"",
-                        context: "Juliana admits the problem exists but frames it as a continuous state that is being handled."
+                        company: "Petrobras",
+                        role: "Field Engineer",
+                        name: "Mariana",
+                        text: "\"The pressure variance is an <span class='h-pink'>ongoing issue</span> that we are monitoring daily.\"",
+                        context: "She admits the problem exists but assures she is in control.",
+                        brazilEquiv: "Questão em andamento / Pendência"
                     },
                     {
-                        company: "MRV Engenharia",
-                        role: "Site Manager",
-                        name: "Carlos",
-                        text: "\"Due to ongoing issues with the municipal permits, phase 2 is paused.\"",
-                        context: "Explaining a delay without sounding incompetent; the issues are external and continuous."
+                        company: "XP Investimentos",
+                        role: "IT Lead",
+                        name: "Felipe",
+                        text: "\"We have some <span class='h-pink'>ongoing issues</span> with the API latency, but a patch is coming.\"",
+                        context: "Felipe avoids saying 'The API is broken'. He says it's a known work-in-progress.",
+                        brazilEquiv: "Problemas pontuais / Questões abertas"
                     },
                     {
                         company: "Ambev",
-                        role: "HR Director",
-                        name: "Fernanda",
-                        text: "\"We need to address the ongoing issues regarding talent retention in the tech team.\"",
-                        context: "Identifying a systemic trend rather than a one-time error."
+                        role: "Supply Chain",
+                        name: "Ana",
+                        text: "\"Supply chain disruption is an <span class='h-pink'>ongoing issue</span> globally, not just for us.\"",
+                        context: "She normalizes the problem. It's a condition, not a failure.",
+                        brazilEquiv: "Problema recorrente / Cenário atual"
                     }
                 ],
-                brazilEquiv: "PENDÊNCIAS / QUESTÕES EM ABERTO",
-                brazilTip: "Evite dizer 'problems'. 'Issues' é mais profissional, e 'Ongoing' mostra que é algo recorrente que você já está gerenciando.",
+                brazilTip: "Evite 'We have a problem'. Soa amador. Use 'We are managing an ongoing issue'.",
                 exercise: {
-                    prompt: "Translate: 'Nós estamos resolvendo as questões pendentes (em andamento) com o servidor.'",
-                    keywords: ["resolving", "solving", "ongoing issues", "server"],
-                    successMsg: "Excellent. You framed the problem professionally.",
-                    failMsg: "Make sure to use 'ongoing issues' and 'server'."
+                    prompt: "Translate: 'Estamos resolvendo algumas questões pendentes.'",
+                    keywords: ["resolving", "solving", "ongoing", "issues"],
+                    successMsg: "Excellent. 'Resolving ongoing issues' sounds very executive.",
+                    failMsg: "Use 'ongoing issues' to describe the 'questões pendentes'."
                 }
             },
             "standpoint": {
                 title: "From My Standpoint",
-                why: "Stop saying 'I think'. 'I think' is weak; it sounds like a guess. 'From my standpoint' is a power move. It signals that your opinion is not personal—it is a professional assessment based on your specific role (CFO, CTO, Legal). It adds weight and authority to your words immediately.",
+                why: "Stop saying 'I think'. 'I think' is weak; it sounds like a guess. '<span class='h-cyan'>From my standpoint</span>' is a power move. It signals that your opinion is not personal—it is a professional assessment based on your specific role (CFO, CTO, Legal).",
                 diagramCode: `
                 graph TD
-                  Decision((THE DECISION))
-                  CFO[CFO] -- "Financial Standpoint" --> Decision
-                  CTO[CTO] -- "Tech Standpoint" --> Decision
-                  Legal[Legal] -- "Legal Standpoint" --> Decision
-                  style Decision fill:#fff,color:#000
-                  style CFO stroke:#00ff9d
-                  style CTO stroke:#00ff9d
-                  style Legal stroke:#00ff9d
+                  Center((The Decision))
+                  A[CFO Standpoint] -->|Money| Center
+                  B[CTO Standpoint] -->|Tech| Center
+                  C[Legal Standpoint] -->|Risk| Center
+                  style A fill:#00ccff,color:#000
+                  style B fill:#00ccff,color:#000
+                  style C fill:#00ccff,color:#000
                 `,
                 powerMove: {
-                    title: "The Authority Shift",
-                    bad: "<strong>Junior:</strong> \"I think this is risky.\" <br><em>(Sounds like fear or a guess)</em>",
-                    good: "<strong>Executive:</strong> \"From a financial standpoint, this is risky.\" <br><em>(Sounds like data and analysis)</em>"
+                    title: "Power Move: The Shift",
+                    text: "<strong>Weak:</strong> 'I think this is risky.' (Sounds like fear)<br><strong>Strong:</strong> 'From a financial standpoint, this is risky.' (Sounds like data)"
                 },
                 scenarios: [
                     {
                         company: "Itaú",
                         role: "CFO",
                         name: "Ricardo",
-                        text: "\"From a financial standpoint, this acquisition is too risky right now.\"",
-                        context: "Ricardo is not guessing; he is speaking from his professional angle."
+                        text: "\"<span class='h-cyan'>From a financial standpoint</span>, the ROI does not justify the risk.\"",
+                        context: "Ricardo isn't saying he dislikes the idea. He is saying the *numbers* dislike it.",
+                        brazilEquiv: "Do meu ponto de vista (Técnico)"
                     },
                     {
                         company: "Havaianas",
-                        role: "Design Lead",
-                        name: "Ana",
-                        text: "\"From my standpoint, the neon palette fits the global trend perfectly.\"",
-                        context: "Asserting expertise in a specific domain (Design)."
+                        role: "Marketing VP",
+                        name: "Sofia",
+                        text: "\"<span class='h-cyan'>From a branding standpoint</span>, this partnership is a perfect match.\"",
+                        context: "She speaks for the brand, not for herself.",
+                        brazilEquiv: "Sob a ótica de marketing"
                     },
                     {
                         company: "Vale",
-                        role: "Legal Counsel",
-                        name: "Pedro",
-                        text: "\"From a legal standpoint, we are safe. But from a PR standpoint, it's a disaster.\"",
-                        context: "Separating two different professional views within the same sentence."
+                        role: "Safety Officer",
+                        name: "Eduardo",
+                        text: "\"<span class='h-cyan'>From an operational standpoint</span>, we cannot proceed until the rain stops.\"",
+                        context: "It's not a choice. It's an operational reality.",
+                        brazilEquiv: "Do ponto de vista operacional"
                     }
                 ],
-                brazilEquiv: "NA MINHA VISÃO TÉCNICA",
                 brazilTip: "Pare de falar 'I think'. Quando você diz 'From my standpoint', você está dizendo: 'Baseado na minha cadeira e experiência...'.",
                 exercise: {
                     prompt: "Translate: 'Do meu ponto de vista, o projeto é viável.'",
@@ -492,46 +469,47 @@
             const data = lessonData[key];
             const container = document.getElementById('content-area');
 
-            // Optional Comparison Box (As Per)
+            // Optional Comparison Box
             let comparisonHTML = '';
             if (data.comparison) {
-                let examplesHTML = '';
-                if (data.comparison.examples) {
-                    examplesHTML = `<div class="comp-examples">
-                        ${data.comparison.examples.map(ex => `
-                            <div class="comp-example-card">
-                                <div class="comp-ex-label">${ex.label}</div>
-                                <div class="comp-ex-text">${ex.text}</div>
-                            </div>
-                        `).join('')}
-                    </div>`;
-                }
-
                 comparisonHTML = `
                     <div class="comparison-box">
                         <div class="comp-title">${data.comparison.title}</div>
                         <div class="comp-text">${data.comparison.text}</div>
-                        ${examplesHTML}
                     </div>
                 `;
             }
 
-            // Optional Power Move Box (Standpoint)
+            // Optional Table (For As Per)
+            let tableHTML = '';
+            if (data.usageTable) {
+                tableHTML = `
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>As Per (Binding/Formal)</th>
+                                <th>According To (Neutral/Source)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.usageTable.map(row => `
+                                <tr>
+                                    <td>${row.asPer}</td>
+                                    <td>${row.accordingTo}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            // Optional Power Move Box
             let powerHTML = '';
             if (data.powerMove) {
                 powerHTML = `
                     <div class="power-box">
                         <div class="power-title">${data.powerMove.title}</div>
-                        <div class="power-grid">
-                            <div class="power-col">
-                                <h4 class="power-bad">Weak</h4>
-                                <p>${data.powerMove.bad}</p>
-                            </div>
-                            <div class="power-col">
-                                <h4 class="power-good">Strong</h4>
-                                <p>${data.powerMove.good}</p>
-                            </div>
-                        </div>
+                        <div class="power-text">${data.powerMove.text}</div>
                     </div>
                 `;
             }
@@ -576,6 +554,7 @@
                     ` : ''}
 
                     ${comparisonHTML}
+                    ${tableHTML}
                     ${powerHTML}
                 </div>
 
@@ -594,12 +573,17 @@
 
             // Re-run Mermaid to render the new diagram
             if (data.diagramCode) {
-                try {
-                    await mermaid.run({
-                        nodes: document.querySelectorAll('.mermaid')
-                    });
-                } catch (e) {
-                    console.log("Mermaid error:", e);
+                // Clear previous diagram attributes to force re-render
+                const mermaidDiv = document.querySelector('.mermaid');
+                if (mermaidDiv) {
+                    mermaidDiv.removeAttribute('data-processed');
+                    try {
+                        await mermaid.run({
+                            nodes: [mermaidDiv]
+                        });
+                    } catch (e) {
+                        console.log("Mermaid error:", e);
+                    }
                 }
             }
         }
